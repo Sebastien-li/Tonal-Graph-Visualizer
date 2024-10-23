@@ -1,0 +1,12 @@
+Time Signature: 3/4
+m1 Gb: vi
+m2 ii
+m3 V7
+m4 I
+m5 IV 
+m6 eb: iio
+m7 V7
+m8 i
+m9 iv
+m10 V7
+m11 i

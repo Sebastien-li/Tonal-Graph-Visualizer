@@ -1,0 +1,4 @@
+Time Signature: 2/4
+m1 C: I
+m2 ii6 b2 I64 b2.5 V7
+m3 I
