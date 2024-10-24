@@ -70,7 +70,10 @@ class TonalGraphInteractive:
         for rhythm_tree_i,rhythm_tree_node in enumerate(self.rhythm_tree.depth_first_search()):
             if not rhythm_tree_node.selected:
                 continue
-            diatonic, chromatic, quality_idx = rhythm_tree_node.selected_chord
+            if rhythm_tree_node.selected_chord is not None:
+                diatonic, chromatic, quality_idx = rhythm_tree_node.selected_chord
+            else:
+                diatonic, chromatic, quality_idx = 0, 0, 12
 
             possible_rn = self.quality_to_rn[self.rhythm_tree.qualities.idx_to_name[quality_idx]]
             for roman_numeral, mode in possible_rn:
