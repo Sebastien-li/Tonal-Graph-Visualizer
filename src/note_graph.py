@@ -39,7 +39,6 @@ class Graph:
             adj[edge[0], edge[1]] = 1
         return adj
 
-
 class NoteGraph(Graph):
     """ Class to represent a graph of notes."""
     dtype_nodes = [ ('id',int),
@@ -56,12 +55,14 @@ class NoteGraph(Graph):
 
     dtype_edges = [('type', 'U10')]
 
-    def __init__(self, score_path):
+    def __init__(self, score):
         super().__init__()
-        self.score = pt.load_score(score_path)
+        self.duration_divisor = None
+        self.score = score
         self.create_graph()
+        self.vertical_dict = self.get_vertical_dict()
 
-    def create_graph(self, find_leap = False):
+    def create_graph(self, find_leap = True):
         """ Create nodes and edges. Optionally, find note leaps. """
         self.nodes = self.create_nodes()
         self.edge_index, self.edge_attr  = self.create_edges()
@@ -86,6 +87,10 @@ class NoteGraph(Graph):
             nodes[i]['offset'] = note['onset_div'] + note['duration_div']
             nodes[i]['beat'] = 1 + note['onset_beat'] % note['ts_beats']
             nodes[i]['voice'] = note['voice']
+            if self.duration_divisor is not None and self.duration_divisor != note['divs_pq']:
+                raise ValueError('Different duration divisors in the same score')
+            else:
+                self.duration_divisor = note['divs_pq']
 
         nodes = np.sort(np.array(nodes, dtype = self.dtype_nodes), order = ['onset', 'pitch_space'])
         nodes['id'] = np.arange(len(nodes))
@@ -158,10 +163,6 @@ class NoteGraph(Graph):
         """ Find the leap nodes."""
         is_leap = []
         for node in self.nodes:
-            if node['isRest']:
-                is_leap.append(False)
-                continue
-
             inc_edg_idx = self.get_edge_dest(node['id'])
             out_edg_idx = self.get_edge_source(node['id'])
             inc_edg_idx = inc_edg_idx[self.edge_attr[inc_edg_idx]['type'] != 'onset']
@@ -171,11 +172,9 @@ class NoteGraph(Graph):
             inc_edges_attr = self.edge_attr[inc_edg_idx]
             out_edges_attr = self.edge_attr[out_edg_idx]
 
-            inc_nodes = inc_nodes[np.logical_and(inc_edges_attr['type'] != 'onset',
-                                                 ~inc_nodes['isRest'])]
+            inc_nodes = inc_nodes[inc_edges_attr['type'] != 'onset' ]
 
-            out_nodes = out_nodes[np.logical_and(out_edges_attr['type'] != 'onset',
-                                                 ~out_nodes['isRest'])]
+            out_nodes = out_nodes[out_edges_attr['type'] != 'onset']
 
             if inc_nodes.size==0:
                 is_leap.append(False)
