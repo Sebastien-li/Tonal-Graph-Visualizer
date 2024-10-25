@@ -42,6 +42,7 @@ class Graph:
 class NoteGraph(Graph):
     """ Class to represent a graph of notes."""
     dtype_nodes = [ ('id',int),
+                    ('note_id', 'U16'),
                     ('pitch_chromatic', int),
                     ('pitch_name', 'U10'),
                     ('pitch_diatonic', int),
@@ -77,6 +78,7 @@ class NoteGraph(Graph):
         nodes = np.zeros(len(note_array), dtype=self.dtype_nodes)
         for i, note in enumerate(note_array):
             pitch = Pitch.from_step_alter(note['step'], note['alter'])
+            nodes[i]['note_id'] = note['id']
             nodes[i]['pitch_chromatic'] = pitch.chromatic
             nodes[i]['pitch_name'] = pitch.name
             nodes[i]['pitch_diatonic'] = pitch.diatonic

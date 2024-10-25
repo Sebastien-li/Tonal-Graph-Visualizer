@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="https://music-encoding.org/schema/4.0.1/mei-CMN.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/4.0.1/mei-CMN.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="4.0.1">
+  <meiHead>
+    <fileDesc>
+      <titleStmt>
+        <title>P1</title>
+      </titleStmt>
+    </fileDesc>
+  </meiHead>
+  <music>
+    <body>
+      <mdiv>
+        <score xml:id="score-0000000001">
+          <scoreDef xml:id="scoredef-0000000002">
+            <staffGrp xml:id="staffgrp-0000000003" bar.thru="true">
+              <staffDef n="1" xml:id="staffdef-0000000004" lines="5">
+                <clef xml:id="clef-0000000005" shape="G" line="2"/>
+                <keySig xml:id="keysig-0000000006" mode="major" sig="1s" pname="g"/>
+                <meterSig xml:id="msig-0000000007" count="3" unit="4"/>
+              </staffDef>
+              <staffDef n="2" xml:id="staffdef-0000000008" lines="5">
+                <clef xml:id="clef-0000000009" shape="F" line="4"/>
+                <keySig xml:id="keysig-0000000010" mode="major" sig="1s" pname="g"/>
+                <meterSig xml:id="msig-0000000011" count="3" unit="4"/>
+              </staffDef>
+            </staffGrp>
+          </scoreDef>
+          <section xml:id="section-0000000012">
+            <measure n="1" xml:id="measure-0000000013">
+              <staff n="1" xml:id="staff-0000000014">
+                <layer n="1" xml:id="voice-0000000015">
+                  <chord xml:id="chord-0000000016" dur="4">
+                    <note dur="4" xml:id="p0n0" oct="4" pname="d" staff="1"/>
+                    <note dur="4" xml:id="p0n1" oct="4" pname="g" staff="1"/>
+                  </chord>
+                </layer>
+              </staff>
+              <staff n="2" xml:id="staff-0000000017">
+                <layer n="5" xml:id="voice-0000000018">
+                  <chord xml:id="chord-0000000019" dur="4">
+                    <note dur="4" xml:id="p0n2" oct="2" pname="g" staff="2"/>
+                    <note dur="4" xml:id="p0n3" oct="3" pname="b" staff="2"/>
+                  </chord>
+                </layer>
+              </staff>
+            </measure>
+            <measure n="2" xml:id="measure-0000000020">
+              <staff n="1" xml:id="staff-0000000021">
+                <layer n="1" xml:id="voice-0000000022">
+                  <note dur="2" xml:id="p0n4" oct="4" pname="g" staff="1"/>
+                  <note dur="4" xml:id="p0n12" oct="5" pname="d" staff="1"/>
+                </layer>
+                <layer n="2" xml:id="voice-0000000023">
+                  <note dur="4" xml:id="p0n5" oct="4" pname="d" staff="1"/>
+                  <note dur="4" xml:id="p0n8" oct="4" pname="e" staff="1"/>
+                  <note dur="4" xml:id="p0n13" oct="4" pname="d" staff="1"/>
+                </layer>
+              </staff>
+              <staff n="2" xml:id="staff-0000000024">
+                <layer n="5" xml:id="voice-0000000025">
+                  <note dur="4" xml:id="p0n6" oct="3" pname="b" staff="2"/>
+                  <beam xml:id="beam-0000000027">
+                    <note dur="8" xml:id="p0n9" oct="4" pname="c" staff="2"/>
+                    <note dur="8" xml:id="p0n11" oct="3" pname="b" staff="2"/>
+                  </beam>
+                  <note dur="4" xml:id="p0n14" oct="3" pname="a" staff="2"/>
+                </layer>
+                <layer n="6" xml:id="voice-0000000026">
+                  <note dur="4" xml:id="p0n7" oct="3" pname="g" staff="2"/>
+                  <note dur="4" xml:id="p0n10" oct="3" pname="e" staff="2"/>
+                  <note dur="4" xml:id="p0n15" oct="3" pname="f" staff="2" accid.ges="s"/>
+                </layer>
+              </staff>
+            </measure>
+            <measure n="3" xml:id="measure-0000000028">
+              <staff n="1" xml:id="staff-0000000029">
+                <layer n="1" xml:id="voice-0000000030">
+                  <note dur="4" xml:id="p0n16" dots="1" oct="4" pname="b" staff="1"/>
+                  <note dur="8" xml:id="p0n22" oct="4" pname="a" staff="1"/>
+                  <note dur="4" xml:id="p0n23" oct="4" pname="g" staff="1"/>
+                </layer>
+                <layer n="2" xml:id="voice-0000000031">
+                  <note dur="2" xml:id="p0n17" oct="4" pname="d" staff="1"/>
+                  <note dur="4" xml:id="p0n24" oct="3" pname="b" staff="1"/>
+                </layer>
+              </staff>
+              <staff n="2" xml:id="staff-0000000032">
+                <layer n="5" xml:id="voice-0000000033">
+                  <note dur="4" xml:id="p0n18" oct="3" pname="g" staff="2"/>
+                  <note dur="4" xml:id="p0n20" oct="3" pname="f" staff="2" accid.ges="s"/>
+                  <note dur="4" xml:id="p0n25" oct="3" pname="g" staff="2"/>
+                </layer>
+                <layer n="6" xml:id="voice-0000000034">
+                  <note dur="4" xml:id="p0n19" oct="3" pname="g" staff="2"/>
+                  <note dur="4" xml:id="p0n21" oct="3" pname="d" staff="2"/>
+                  <note dur="4" xml:id="p0n26" oct="3" pname="e" staff="2"/>
+                </layer>
+              </staff>
+            </measure>
+            <measure n="4" xml:id="measure-0000000035">
+              <staff n="1" xml:id="staff-0000000036">
+                <layer n="1" xml:id="voice-0000000037">
+                  <note dur="4" xml:id="p0n27" dots="1" oct="4" pname="g" staff="1"/>
+                  <note dur="8" xml:id="p0n36" oct="4" pname="a" staff="1"/>
+                  <note dur="4" xml:id="p0n39" oct="4" pname="b" staff="1"/>
+                </layer>
+                <layer n="2" xml:id="voice-0000000038">
+                  <beam xml:id="beam-0000000042">
+                    <note dur="8" xml:id="p0n28" oct="4" pname="e" staff="1"/>
+                    <note dur="8" xml:id="p0n31" oct="4" pname="d" staff="1"/>
+                    <note dur="8" xml:id="p0n33" oct="4" pname="e" staff="1"/>
+                    <note dur="8" xml:id="p0n37" oct="4" pname="f" staff="1" accid.ges="s"/>
+                  </beam>
+                  <note dur="4" xml:id="p0n40" oct="4" pname="g" staff="1"/>
+                </layer>
+              </staff>
+              <staff n="2" xml:id="staff-0000000039">
+                <layer n="5" xml:id="voice-0000000040">
+                  <beam xml:id="beam-0000000043">
+                    <note dur="8" xml:id="p0n29" oct="4" pname="c" staff="2"/>
+                    <note dur="8" xml:id="p0n32" oct="3" pname="b" staff="2"/>
+                  </beam>
+                  <note dur="4" xml:id="p0n34" oct="4" pname="c" staff="2"/>
+                  <note dur="4" xml:id="p0n41" oct="4" pname="d" staff="2"/>
+                </layer>
+                <layer n="6" xml:id="voice-0000000041">
+                  <note dur="4" xml:id="p0n30" oct="3" pname="c" staff="2"/>
+                  <beam xml:id="beam-0000000044">
+                    <note dur="8" xml:id="p0n35" oct="2" pname="b" staff="2"/>
+                    <note dur="8" xml:id="p0n38" oct="2" pname="a" staff="2"/>
+                  </beam>
+                  <note dur="4" xml:id="p0n42" oct="2" pname="g" staff="2"/>
+                </layer>
+              </staff>
+            </measure>
+            <measure n="5" xml:id="measure-0000000045" right="end">
+              <staff n="1" xml:id="staff-0000000046">
+                <layer n="1" xml:id="voice-0000000047">
+                  <note dur="2" xml:id="p0n43" dots="1" oct="4" pname="a" staff="1" fermata="above"/>
+                </layer>
+                <layer n="2" xml:id="voice-0000000048">
+                  <note dur="2" xml:id="p0n44" dots="1" oct="4" pname="f" staff="1" accid.ges="s"/>
+                </layer>
+              </staff>
+              <staff n="2" xml:id="staff-0000000049">
+                <layer n="5" xml:id="voice-0000000050">
+                  <note dur="2" xml:id="p0n45" dots="1" oct="4" pname="d" staff="2"/>
+                </layer>
+                <layer n="6" xml:id="voice-0000000051">
+                  <note dur="2" xml:id="p0n46" dots="1" oct="3" pname="d" staff="2" fermata="above"/>
+                </layer>
+              </staff>
+            </measure>
+          </section>
+        </score>
+      </mdiv>
+    </body>
+  </music>
+</mei>
