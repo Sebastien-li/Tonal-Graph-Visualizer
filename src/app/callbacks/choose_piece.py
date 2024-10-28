@@ -6,10 +6,10 @@ from dash import dcc, html, Input, Output, State
 import verovio as vrv
 import partitura as pt
 
-from ..plotter import plot_score
-from ...note_graph import NoteGraph
-from ...rhythm_tree import RhythmTreeInteractive
-from ...tonal_graph import TonalGraphInteractive
+from src.app.plotter import plot_score, plot_time_graph
+from src.note_graph import NoteGraph
+from src.rhythm_tree import RhythmTreeInteractive
+from src.tonal_graph import TonalGraphInteractive
 
 def choose_piece_callback(app):
     """ Function for the callback for choosing a piece from the upload button """
@@ -17,17 +17,18 @@ def choose_piece_callback(app):
     @app.callback(
         Output('div-upload-output', 'children'),
         Output('graph-score', 'figure'),
+        Output('graph-time-graphs', 'figure'),
         Input('upload-button', 'filename'),
         Input('upload-button', 'contents')
     )
     def choose_piece(filename, score_contents):
         """ Callback for choosing a piece from the upload button """
         if filename is None:
-            return 'No file uploaded', {}
+            return 'No file uploaded', {}, {}
 
         path_name = os.path.join('assets','scores',filename)
         if not os.path.exists(path_name):
-            return 'File must be in assets/scores directory', {}
+            return 'File must be in assets/scores directory', {}, {}
 
         score = pt.load_score(path_name)
         note_graph = NoteGraph(score)
@@ -42,5 +43,6 @@ def choose_piece_callback(app):
         # vrv_toolkit.renderToSVGFile(svg_url)
 
         score_figure = plot_score(os.path.join('assets','scores','page-scaled.svg'), note_graph)
+        time_graph_figure = plot_time_graph(note_graph, rhythm_tree, tonal_graph)
 
-        return filename, score_figure
+        return filename, score_figure, time_graph_figure

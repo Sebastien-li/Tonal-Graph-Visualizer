@@ -189,12 +189,20 @@ class NoteGraph(Graph):
             closest_inc_index = np.argmin([abs(x['pitch_space']-node['pitch_space'])
                                             for x in inc_nodes])
             inc_node = inc_nodes[closest_inc_index]
-            prev_interval = abs(7*node['pitch_octave']+node['pitch_diatonic'] - 7*inc_node['pitch_octave']-inc_node['pitch_diatonic'])
 
-            closest_out_index = np.argmin([abs(x['pitch_space']-node['pitch_space'])
-                                            for x in out_nodes])
+            octave = node['pitch_octave']
+            diatonic = node['pitch_diatonic']
+            ps = node['pitch_space']
+            inc_octave = inc_node['pitch_octave']
+            inc_diatonic = inc_node['pitch_diatonic']
+
+            prev_interval = abs(7 * octave + diatonic - 7 * inc_octave - inc_diatonic)
+
+            closest_out_index = np.argmin([abs(x['pitch_space'] - ps) for x in out_nodes])
             out_node = out_nodes[closest_out_index]
-            next_interval = abs(7*out_node['pitch_octave']+out_node['pitch_diatonic'] - 7*node['pitch_octave']-node['pitch_diatonic'])
+            out_octave = out_node['pitch_octave']
+            out_diatonic = out_node['pitch_diatonic']
+            next_interval = abs(7 * out_octave + out_diatonic - 7 * octave - diatonic)
 
             is_leap.append(prev_interval > 1 and next_interval > 1)
 

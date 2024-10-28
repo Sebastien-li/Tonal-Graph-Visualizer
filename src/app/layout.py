@@ -14,10 +14,11 @@ def get_layout():
             ]),
             html.Div(id = 'div-score', children = [
                 dcc.Graph(id = 'graph-score', figure = {})
-            ])
+            ]),
+
 
         ], overlay_style={"visibility":"visible", "opacity": .5, "backgroundColor": "white"}),
-
+        dcc.Graph(id = 'graph-time-graphs', figure = {}),
 
     ]
     return layout

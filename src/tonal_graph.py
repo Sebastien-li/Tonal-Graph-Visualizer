@@ -39,6 +39,7 @@ class TonalGraphInteractive:
         self.duration_divisor = rhythm_tree.duration_divisor
         self.mode_list = mode_list
         self.transitions = transitions if transitions else {}
+        self.qualities = rhythm_tree.qualities
         self.quality_to_rn = self.get_quality_to_rn()
         self.tonality_distances, self.keys_graph = tonality_distances, keys_graph
         self.nodes = self.create_nodes()

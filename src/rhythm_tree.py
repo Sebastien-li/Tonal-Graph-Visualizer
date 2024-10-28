@@ -7,7 +7,7 @@ from functools import lru_cache, reduce
 import numpy as np
 from src.music_theory_classes import Pitch
 from src.music_theory_objects import qualities
-from src.utils import display_float, interval_collision, interval_in, get_relative_duration, octave_weight, duration_weight, doubling_weight
+from src.utils import *
 
 
 def get_subdivision(duration:Fraction, beat_ql:Fraction, minimum_subdivision=0.5):
@@ -220,7 +220,7 @@ class RhythmTreeAnalyzed(RhythmTree):
             for node in selected_nodes:
                 node_pc = (node['pitch_diatonic'], node['pitch_chromatic'])
                 if node_pc in list_notes:
-                    inversion[diatonic_root, chromatic_root, quality_idx] = list_notes.index(node_pc)
+                    inversion[diatonic_root, chromatic_root, quality_idx] =list_notes.index(node_pc)
                     break
             root_score[diatonic_root, chromatic_root, quality_idx] /= len(union)
 
