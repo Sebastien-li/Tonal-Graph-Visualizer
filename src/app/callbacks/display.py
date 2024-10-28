@@ -5,6 +5,7 @@ from dash import Input, Output, State, no_update
 
 from src.app.plotter import plot_score, plot_time_graph
 from src.harmonic_analyzer import HarmonicAnalyzer
+from src.app.layout import visible_style
 
 def display_callbacks(app, harmonic_analyzer: HarmonicAnalyzer):
     """ Function for the callback for choosing a piece from the upload button """
@@ -13,13 +14,15 @@ def display_callbacks(app, harmonic_analyzer: HarmonicAnalyzer):
         Output('div-upload-output', 'children'),
         Output('graph-score', 'figure'),
         Output('graph-time-graphs', 'figure'),
+        Output('div-score', 'style'),
+        Output('div-time-graphs', 'style'),
         Input('upload-button', 'filename'),
         Input('upload-button', 'contents'),
     )
     def choose_piece(filename, score_contents):
         """ Callback for choosing a piece from the upload button """
         if filename is None:
-            return no_update, no_update, no_update
+            return no_update, no_update, no_update, no_update, no_update
         print(f'File chosen: {filename}')
         t0 = time()
         harmonic_analyzer.load_from_dash_input(filename, score_contents)
@@ -32,4 +35,4 @@ def display_callbacks(app, harmonic_analyzer: HarmonicAnalyzer):
         t3 = time()
         print(f"Time to plot the time graph: {t3-t2:.2f} s\n")
 
-        return filename, score_figure, time_graph_figure
+        return filename, score_figure, time_graph_figure, visible_style, visible_style
