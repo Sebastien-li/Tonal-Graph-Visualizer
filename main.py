@@ -18,13 +18,10 @@ def main():
     mei_path = file_path.parent / 'score.mei'
 
     t0 = time()
-    if (mei_path).exists():
-        score = pt.load_score(str(mei_path))
-        logger.info('Score loaded in %s seconds', time()-t0)
-    else:
-        score = pt.load_score(str(file_path))
-        pt.save_mei(score, mei_path)
-        logger.info('MEI file created in %s seconds', time()-t0)
+
+    score = pt.load_score(str(file_path))
+    pt.save_mei(score, mei_path)
+    logger.info('MEI file created in %s seconds', time()-t0)
 
     t1 = time()
     note_graph = NoteGraph(score)
@@ -40,7 +37,7 @@ def main():
 
 
     vrv_toolkit = vrv.toolkit()
-    vrv_toolkit.loadFile(str(file_path))
+    vrv_toolkit.loadFile(str(mei_path))
     print(vrv_toolkit)
 if __name__ == '__main__':
     main()

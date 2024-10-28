@@ -1,10 +1,11 @@
 """ Plotter module for the app. """
+import base64
+
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from src.mei_svg import MEISVGHandler
-from src.rhythm_tree import RhythmTreeInteractive
+from src.harmonic_analyzer import RhythmTreeInteractive
 from src.music_theory_classes import Pitch
 from src.roman_text import RomanNumeral
 
@@ -21,51 +22,72 @@ color_dict = {'onset': color_palette['red'],
               'follow': color_palette['green'],
               'silence': color_palette['light_green']}
 
-def plot_score(url, note_graph):
+def plot_score(harmonic_analyzer, plot_graph = True):
     """ Plot the score of the piece. """
-    mei_svg_doc = MEISVGHandler.parse_url(url)
+    svg_data = harmonic_analyzer.svg_data
+    note_graph = harmonic_analyzer.note_graph
+
+    svg_doc = harmonic_analyzer.svg_doc
+
+    encoded_svg_data = base64.b64encode(svg_data.encode()).decode()
 
     fig = go.Figure()
     graph_scale = .8
-    graph_width = mei_svg_doc.svg_width * graph_scale
-    graph_height = mei_svg_doc.svg_height * graph_scale
+    graph_width = svg_doc.svg_width * graph_scale
+    graph_height = svg_doc.svg_height * graph_scale
+    graph_size = (graph_width, graph_height)
 
+    figure_width = 1600
+    figure_height = graph_height + 100
 
     fig.add_layout_image(x=0, sizex=graph_width, y=0, sizey=graph_height, xref="x", yref="y",
                          layer="below",
-                         source = url)
-    fig.update_xaxes(showgrid=False, visible=False, range=[0,graph_width])
-    fig.update_yaxes(showgrid=False, visible=False, range=[graph_height,0])
-    fig.update_layout(height=graph_height, width=graph_width, margin={'l':0, 'r':0, 'b':0, 't':0},
-                      plot_bgcolor='white')
+                         source='data:image/svg+xml;base64,' + encoded_svg_data)
+    fig.update_xaxes(showgrid=False, visible=False, range=[0,figure_width])
+    fig.update_yaxes(showgrid=False, visible=False, range=[figure_height-100,-100])
+    fig.update_layout(height=figure_height, width=figure_width, margin={'l':0, 'r':0, 'b':0, 't':0},
+                      plot_bgcolor='white', dragmode='pan',
+                      legend = {'yanchor':'top', 'y':0.99, 'xanchor':'left', 'x':0.01})
+
+    edge_show_legend = {'onset':True, 'during':True, 'follow':True, 'silence':True}
+
     for i, edge_index in enumerate(note_graph.edge_index):
         edge_attr = note_graph.edge_attr[i]['type']
         src = note_graph.nodes[edge_index[0]]
         dst = note_graph.nodes[edge_index[1]]
-        src_x, src_y = mei_svg_doc.get_note_coords(src['note_id'], (graph_width, graph_height))
-        dst_x, dst_y = mei_svg_doc.get_note_coords(dst['note_id'], (graph_width, graph_height))
+        src_type = 'end' if edge_attr != "onset" else 'middle'
+        dst_type = 'start' if edge_attr != "onset" else 'middle'
+        src_x, src_y = svg_doc.get_note_coords(src['note_id'], graph_size, src_type)
+        dst_x, dst_y = svg_doc.get_note_coords(dst['note_id'], graph_size, dst_type)
         trace = go.Scatter(
             x = [src_x, dst_x, None],
             y = [src_y, dst_y, None],
             line = {"color": color_dict[edge_attr]},
             hoverinfo='none',
             mode='lines',
-            opacity=0.5,
-            showlegend=False,
+            opacity=0.5 if plot_graph else 0,
+            showlegend=edge_show_legend[edge_attr],
+            legendgroup='Show Note graph',
+            legendgrouptitle={'text':'Click here to show/hide the note graph'},
+            name=edge_attr
         )
         fig.add_trace(trace)
+        edge_show_legend[edge_attr] = False
 
     return fig
 
-def plot_time_graph(note_graph, rhythm_tree, tonal_graph, xmin=None, xmax=None):
+def plot_time_graph(harmonic_analyzer, xmin=None, xmax=None):
     """ Create a plotly figure with the temporal graph of the analysis. """
-    fig = make_subplots(rows=2, cols=2, shared_xaxes=True, vertical_spacing=0.05,
-                        subplot_titles=('Note graph', 'Tonal graph', 'Rhythm tree'),
-                        specs=[[{}, {'rowspan': 2}],
-                               [{}, None]])
+    note_graph = harmonic_analyzer.note_graph
+    rhythm_tree = harmonic_analyzer.rhythm_tree
+    tonal_graph = harmonic_analyzer.tonal_graph
+
+    fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.05,
+                        row_heights=[2,1,1],
+                        subplot_titles=('Note graph', 'Rhythm tree', 'Tonal graph'))
     fig.update_layout(
         showlegend=True, dragmode='pan',
-        height = 900, width = 1900,
+        height = 1000, width = 1900,
         title_text = "Temporal graphs",
         legend_tracegroupgap=110,
     )
@@ -73,10 +95,10 @@ def plot_time_graph(note_graph, rhythm_tree, tonal_graph, xmin=None, xmax=None):
     # X axis layout
     score = note_graph.score
     if xmin is None:
-        xmin = float(score[0].measures[0].start.t)
+        xmin = float(score[0].measures[0].start.t) - 1
     if xmax is None:
-        last_measure = score[0].measures[min(1, len(score[0].measures)-1)]
-        xmax = float(last_measure.end.t) + 0.2
+        last_measure = score[0].measures[min(11, len(score[0].measures)-1)]
+        xmax = float(last_measure.end.t) + 1
 
     fig.update_xaxes(range = [xmin, xmax],
                      tickvals = [x.start.t for x in score[0].measures],
@@ -84,8 +106,8 @@ def plot_time_graph(note_graph, rhythm_tree, tonal_graph, xmin=None, xmax=None):
                      matches = 'x')
 
     fig.update_layout(xaxis_showticklabels=False,
-                      xaxis2_showticklabels=True,xaxis2_title = 'measure number',
-                      xaxis3_showticklabels=True)
+                      xaxis2_showticklabels=True,
+                      xaxis3_showticklabels=True,xaxis3_title = 'measure number')
 
     #Note graph
     edge_trace, node_traces = make_note_graph_trace(note_graph)
@@ -105,8 +127,8 @@ def plot_time_graph(note_graph, rhythm_tree, tonal_graph, xmin=None, xmax=None):
 
     # Tonal graph
     node_trace, chord_text_trace, row_height = make_tonal_graph_trace(tonal_graph)
-    fig.add_trace(node_trace, row=1, col=2)
-    fig.add_trace(chord_text_trace, row=1, col=2)
+    fig.add_trace(node_trace, row=3, col=1)
+    fig.add_trace(chord_text_trace, row=3, col=1)
 
 
     # Y axis layout
@@ -120,7 +142,7 @@ def plot_time_graph(note_graph, rhythm_tree, tonal_graph, xmin=None, xmax=None):
     fig.update_yaxes(zeroline = False,
                 tickvals = row_height-0.5,
                 ticktext = ['C','C#', 'D','E-', 'E', 'F', 'F#', 'G', 'A-', 'A','B-', 'B', ''],
-                row=1, col=2)
+                row=3, col=1)
 
     return fig
 
@@ -172,10 +194,12 @@ def make_rhythm_tree_trace(rhythm_tree: RhythmTreeInteractive):
     selected_show_legend = True
     unselected_show_legend = True
     for i, node in enumerate(rhythm_tree.depth_first_search()):
+        if node.depth == 0:
+            continue
         x0 = node.onset
         x1 = node.offset - 0.1
         y0 = np.log2(float(node.subdivision)) if node.depth != 0 else 3
-        y1 = np.log2(float(node.subdivision))+0.5 if node.depth != 0 else 3.5
+        y1 = np.log2(float(node.subdivision))+0.5
 
         if node.selected_chord is None:
             pitch, quality_label = '', ''
@@ -195,11 +219,12 @@ def make_rhythm_tree_trace(rhythm_tree: RhythmTreeInteractive):
                 mode='lines',
                 line={'color':color_palette['orange']},
                 hoverinfo='text' ,
-                text = f"{pitch}{quality_label}" if node.depth != 0 else "Entire score",
+                text = f"{pitch}{quality_label}",
                 fillcolor=color_palette['orange'],
                 customdata=[i],
                 showlegend=selected_show_legend,
-                name = "Selected analysis",
+                #name = "Selected analysis",
+                legendgroup='rhythm_tree',
                 ))
             selected_show_legend = False
         else:
@@ -214,7 +239,8 @@ def make_rhythm_tree_trace(rhythm_tree: RhythmTreeInteractive):
                 fillcolor=color_palette['light_blue'],
                 customdata=[i],
                 showlegend=unselected_show_legend,
-                name = "Analysis",
+                #name = "Analysis",
+                legendgroup='rhythm_tree',
                 ))
             unselected_show_legend = False
 
