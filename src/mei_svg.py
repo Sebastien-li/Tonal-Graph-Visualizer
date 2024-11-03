@@ -61,7 +61,6 @@ class MEISVGHandler():
     def get_note_coords(self, note_id, graph_size, edge_type = 'start'):
         """ Get the coordinates of a note from its ID"""
         assert edge_type in ['start','end','middle']
-        g_tags = self.doc.getElementsByTagName('g')
         note_head_element = self.note_element_dict[note_id][0]
         x = int(note_head_element.getAttribute('x'))
         y = int(note_head_element.getAttribute('y'))

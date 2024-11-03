@@ -18,16 +18,19 @@ def get_layout():
             ]),
 
             html.Div(id = 'div-score', children = [
-                dcc.Graph(id = 'graph-score', figure = {})
+                dcc.Graph(id = 'graph-score', figure = {}),
+                dcc.Checklist(id='check-sticky-score', options = ['Sticky score'], value = ['Sticky score']),
             ], style = invisible_style),
 
             html.Div(id = 'div-time-graphs', children = [
                 dcc.Graph(id = 'graph-time-graphs', figure = {}),
             ], style = invisible_style),
 
-        ], overlay_style={"visibility":"visible", "opacity": .5, "backgroundColor": "white"}),
+            html.Div(id = 'div-chord-graph', children=[
+                dcc.Graph(id = 'graph-chord-graph', figure = {}),
+            ], style = invisible_style),
 
-
-
+        ], overlay_style={"visibility":"visible", "opacity": 1, "backgroundColor": "white"}),
+        dcc.Store(id = 'trace-index', data = {}),
     ]
     return layout

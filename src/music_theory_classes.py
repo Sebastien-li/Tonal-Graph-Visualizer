@@ -3,6 +3,7 @@ Contains the classes for the music theory objects
 """
 
 import numpy as np
+from functools import cache
 
 class Pitch:
     """
@@ -207,3 +208,33 @@ class Mode:
 
     def __repr__(self):
         return f'{self.name}'
+
+class Key:
+    """ Class that represents a key """
+    def __init__(self, tonic:Pitch, mode: str):
+        self.tonic = tonic
+        self.mode = mode
+        self.neutral_tonic = Pitch(0,0) if mode == 'M' else Pitch(5,9)
+        self.key_alteration = self.__compute_key_alteration()
+    def __compute_key_alteration(self):
+        return compute_key_alteration(self.tonic.diatonic,self.tonic.chromatic,
+                                             self.neutral_tonic.diatonic, self.neutral_tonic.chromatic)
+    def __repr__(self):
+        if self.mode == 'M':
+            return f'{self.tonic}'
+        return f'{str(self.tonic).lower()}m'
+
+@cache
+def compute_key_alteration(diatonic, chromatic, diatonic_target, chromatic_target):
+    """ Computes the alteration of a key """
+    diatonic_minus, chromatic_minus = diatonic, chromatic
+    diatonic_plus, chromatic_plus = diatonic, chromatic
+    i = 0
+    while True:
+        if diatonic_minus == diatonic_target and chromatic_minus == chromatic_target:
+            return -i
+        if diatonic_plus == diatonic_target and chromatic_plus == chromatic_target:
+            return i
+        diatonic_minus, chromatic_minus = (diatonic_minus + 4)%7, (chromatic_minus + 7)%12
+        diatonic_plus, chromatic_plus = (diatonic_plus - 4)%7, (chromatic_plus - 7)%12
+        i += 1

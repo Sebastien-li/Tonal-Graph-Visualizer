@@ -24,10 +24,11 @@ class HarmonicAnalyzer:
     def analyze_file(self, filepath):
         """ Analyze a file """
         self.score = pt.load_score(filepath)
+        self.mei = pt.save_mei(self.score)
         self.note_graph = NoteGraph(self.score)
         self.rhythm_tree = RhythmTreeInteractive.from_note_graph(self.note_graph)
         self.tonal_graph = TonalGraphInteractive(self.rhythm_tree)
-        self.mei = pt.save_mei(self.score)
+
 
     def analyze_svg(self, output_path = None):
         """ Create the SVG of the score """
@@ -43,7 +44,8 @@ class HarmonicAnalyzer:
         """ Input:  dash upload: filename and contents"""
         _ , score_contents_string = score_contents.split(',')
         decoded = base64.b64decode(score_contents_string)
-        temp_filepath = os.path.join('.temp',filename)
+        temp_filepath = os.path.join('temp',filename)
+        os.makedirs('temp', exist_ok=True)
         with open(temp_filepath, 'wb') as f:
             f.write(decoded)
 

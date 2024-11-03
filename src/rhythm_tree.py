@@ -30,6 +30,7 @@ class RhythmTree:
     """ A tree structure that represents the possible rhythm segmentations of a piece of music"""
     def __init__(self, note_graph, onset, subdivision, duration, parent, measure_idx, depth = 0,
                  minimum_subdivision = 0.5):
+        self.id = 0
         self.note_graph = note_graph
         self.onset = int(onset)
         self.duration = int(duration)
@@ -141,6 +142,9 @@ class RhythmTree:
                                depth=1,
                                **kwargs)
             root.add_child(child)
+
+        for i, node in enumerate(root.depth_first_search()):
+            node.id = i
         return root
 
     def remove_duplicates(self):

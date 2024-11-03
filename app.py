@@ -5,6 +5,7 @@ import verovio as vrv
 from src.harmonic_analyzer import HarmonicAnalyzer
 from src.app.layout import get_layout
 from src.app.callbacks.display import display_callbacks
+from src.app.callbacks.click_time_graph import click_time_graph_callback
 
 verovio_options = {
         'breaks': 'none',
@@ -13,6 +14,7 @@ verovio_options = {
         'pageMarginBottom': 0,
         'pageMarginTop': 0,
         'scaleToPageSize': True,
+        'mnumInterval': 1
     }
 
 def main():
@@ -24,6 +26,7 @@ def main():
     app = Dash(__name__)
     app.layout = get_layout()
     display_callbacks(app, harmonic_analyzer)
+    click_time_graph_callback(app, harmonic_analyzer)
     app.run(debug=True, port = 8052)
 
 if __name__ == '__main__':

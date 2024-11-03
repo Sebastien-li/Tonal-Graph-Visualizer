@@ -1,7 +1,7 @@
 """
 Contains the objects that define the music theory of the model.
 """
-from src.music_theory_classes import Qualities, Mode
+from src.music_theory_classes import Qualities, Mode, Pitch
 from src.transition import Transitions
 
 qualities = Qualities(('M','major triad', {'C':0.4, 'E':0.3, 'G':0.3}),
